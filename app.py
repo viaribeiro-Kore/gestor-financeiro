@@ -128,7 +128,7 @@ def main():
     st.sidebar.header("Novo Lançamento")
     with st.sidebar.form(key="transaction_form", clear_on_submit=True):
         description = st.text_input("Descrição*")
-        amount = st.number_input("Valor (R$)*", min_value=0.01, format="%.2f")
+        amount = st.number_input("Valor (US$)*", min_value=0.01, format="%.2f")
         trans_type = st.selectbox("Tipo", ["❌ Pagamento", "✅ Recebimento"])
         selected_contact_name = st.selectbox("Contato", options=contact_names)
         category = st.text_input("Categoria")
@@ -159,7 +159,7 @@ def main():
             total_recebido = df_realizado[df_realizado['type'] == '✅ Recebimento']['amount'].sum()
             total_pago = df_realizado[df_realizado['type'] == '❌ Pagamento']['amount'].sum()
             saldo = total_recebido - total_pago
-            col1, col2, col3 = st.columns(3); col1.metric("Total Recebido", f"R$ {total_recebido:,.2f}"); col2.metric("Total Pago", f"R$ {total_pago:,.2f}"); col3.metric("Saldo em Caixa", f"R$ {saldo:,.2f}", delta=f"{saldo:,.2f}")
+            col1, col2, col3 = st.columns(3); col1.metric("Total Recebido", f"US$ {total_recebido:,.2f}"); col2.metric("Total Pago", f"US$ {total_pago:,.2f}"); col3.metric("Saldo em Caixa", f"US$ {saldo:,.2f}", delta=f"{saldo:,.2f}")
         else: st.info("Nenhum lançamento realizado para exibir no dashboard.")
     
     with tab2:
@@ -171,7 +171,7 @@ def main():
                 col1, col2, col3, col4, col5 = st.columns([3, 1, 1, 1, 2]);
                 with col1:
                     st.write(row["description"]); contact_display = row['contact_name'] or 'Nenhum'; st.caption(f"Categoria: {row['category']} | Contato: {contact_display}")
-                with col2: st.write(f"R$ {row['amount']:,.2f}")
+                with col2: st.write(f"US$ {row['amount']:,.2f}")
                 with col3: st.write(row["payment_date"])
                 with col4: st.write(row["status"])
                 with col5:
@@ -189,7 +189,7 @@ def main():
         else:
             for _, row in pending_refunds.iterrows():
                 with st.container(border=True):
-                    st.write(f"**Transação:** {row['description']} | **Valor:** R$ {row['amount']:,.2f}")
+                    st.write(f"**Transação:** {row['description']} | **Valor:** US$ {row['amount']:,.2f}")
                     current_index = 0
                     if row['refund_to_contact_id'] and not pd.isna(row['refund_to_name']):
                         try: current_index = contact_names.index(row['refund_to_name'])
